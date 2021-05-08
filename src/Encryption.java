@@ -56,14 +56,21 @@ public class Encryption {
             throw new IllegalArgumentException("Args is not correct.");
         }
 
+
         if (argsList.contains(ENCRYPT_KEY)) {
             int encryptKeyIndex = getArgKeyIndex(ENCRYPT_KEY, 2, argsList);
             String inputFilePath = argsList.get(encryptKeyIndex + 2);
             String encryptionKey = argsList.get(encryptKeyIndex + 1);
+            if (inputFilePath.isBlank() || encryptionKey.isBlank()) {
+                throw new IllegalArgumentException("Key or path is empty.");
+            }
             String outputFilePath = inputFilePath;
             if (argsList.contains(PATH_KEY)) {
                 int pathKeyIndex = getArgKeyIndex(PATH_KEY, 1, argsList);
                 outputFilePath = argsList.get(pathKeyIndex + 1);
+                if (outputFilePath.isBlank()){
+                    outputFilePath = inputFilePath;
+                }
             }
 
             String content = Files.readString(Paths.get(inputFilePath));
@@ -73,10 +80,16 @@ public class Encryption {
             int decryptKeyIndex = getArgKeyIndex(DECRYPT_KEY, 2, argsList);
             String inputFilePath = argsList.get(decryptKeyIndex + 2);
             String decryptionKey = argsList.get(decryptKeyIndex + 1);
+            if (inputFilePath.isBlank() || decryptionKey.isBlank()) {
+                throw new IllegalArgumentException("Key or path is empty.");
+            }
             String outputFilePath = inputFilePath;
             if (argsList.contains(PATH_KEY)) {
                 int pathKeyIndex = getArgKeyIndex(PATH_KEY, 1, argsList);
                 outputFilePath = argsList.get(pathKeyIndex + 1);
+                if (outputFilePath.isBlank()) {
+                    outputFilePath = inputFilePath;
+                }
             }
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFilePath))) {
                 writer.write(decrypt(Files.readAllBytes(Paths.get(inputFilePath)), decryptionKey));

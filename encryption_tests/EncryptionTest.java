@@ -16,10 +16,11 @@ public class EncryptionTest {
 
     @Test
     public void decryptionEncryptionTest() {
-        String randomString = getRandomString();
-        System.out.println(randomString);
-        String actualResult = Encryption.decrypt(Encryption.encrypt(randomString, "1a"), "1a");
-        Assert.assertEquals(randomString, actualResult);
+        for (int i = 0; i < 20; i++) {
+            String randomString = getRandomString();
+            String actualResult = Encryption.decrypt(Encryption.encrypt(randomString, "1a"), "1a");
+            Assert.assertEquals(randomString, actualResult);
+        }
     }
 
     @Test
